@@ -52,3 +52,8 @@ ressources:
         type: OS::Cinder::Volume
         properties:
             size: { get_param : paramSize }
+
+outputs:
+    private_keypair:
+        description: This is your private key pair
+        value: { get_attr : [keypair_from_heat, private_key] }
