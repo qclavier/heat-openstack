@@ -1,9 +1,26 @@
 heat_template_version: queens
 
+parameters:
+    flavor: # Paramètre le fait que le paramètre flavor doit être entré par l'utilisateur
+        description: param for flavor
+        type: string
+        default: cirros256 # Valeur par défaut si l'utilisateur n'entre aucun paramètre
+    param_size:
+        description: param for volume size
+        type: number
+        default: 1
+
 ressources:
     first_instances:
         type: OS::Nova::Server
         properties:
-            flavor: cirros256
+            flavor: { get_param: flavor } # Pour demander à l'utilisateur la valeur de flavor qu'il souhaite, s'il n'entre rien, la valeur par défaut sera utilisée
             image: cirros-0.5.x86_64-disk
-            
+    volume1:
+        type: OS::Cinder::Volume
+        properties:
+            size: 5 #Création d'un volume avec de Cinder de taille 5Go
+    volume2:
+        type: OS::Cinder::Volume
+        properties:
+            size: { get_param: param_size } # Création d'un volume dont la taille sera choisit par l'utilisateur
